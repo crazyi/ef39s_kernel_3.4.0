@@ -183,7 +183,7 @@
 #define	THERM_NTC_CURR_VERRIDE		BIT(7)
 
 #define SMB137B_CHG_PERIOD	((HZ) * 150)
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 #define BAD_CHG_CHECK_TIME	((HZ) * 40)
 #endif
 
@@ -199,7 +199,7 @@
 
 #define SMB137B_DEFAULT_BATT_RATING   950
 
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 #define BAD_CHG_MAX_CURRENT	1000
 #endif
 
@@ -241,7 +241,7 @@ enum charger_stat {
 	SMB137B_ENUMERATED,
 };
 
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 enum VERIFY_BAD_CHG_STATE {
 	VERIFY_BAD_CHG,
 	VERIFY_CURRENT,
@@ -252,9 +252,10 @@ enum VERIFY_BAD_CHG_STATE {
 static struct smb137b_data *usb_smb137b_chg;
 
 #ifdef CONFIG_SKY_SMB136S_CHARGER
+extern int android_get_udc_state(void);
 extern int pm8058_is_factory_cable(void);
 atomic_t smb_charger_state;
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 enum VERIFY_BAD_CHG_STATE verified_charger = VERIFY_BAD_CHG;
 #endif
 #endif
@@ -478,7 +479,7 @@ static int smb137b_start_charging(struct msm_hardware_charger *hw_chg,
 	smb137b_chg->batt_status = POWER_SUPPLY_STATUS_CHARGING;
 	smb137b_chg->batt_chg_type = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
 
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 	if(verified_charger == VERIFY_CURRENT)
 		return ret;
 #endif
@@ -499,7 +500,7 @@ static int smb137b_start_charging(struct msm_hardware_charger *hw_chg,
 	}
 	
 	/*schedule charge_work to keep track of battery charging state*/
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 	schedule_delayed_work(&smb137b_chg->charge_work, BAD_CHG_CHECK_TIME);
 #else
 	schedule_delayed_work(&smb137b_chg->charge_work, SMB137B_CHG_PERIOD);
@@ -520,7 +521,7 @@ static int smb137b_stop_charging(struct msm_hardware_charger *hw_chg)
 	if (smb137b_chg->charging == false)
 		return 0;
 
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 	verified_charger = VERIFY_BAD_CHG;
 #endif
 	smb137b_chg->charging = false;
@@ -700,7 +701,7 @@ static void smb137b_charge_sm(struct work_struct *smb137b_work)
 	struct smb137b_data *smb137b_chg;
 	u8 temp = 0;
 	int notify_batt_changed = 0;
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 	unsigned long update_time = SMB137B_CHG_PERIOD;
 	u8 aicl;
 	int cur_charge = 0x14;
@@ -717,7 +718,7 @@ static void smb137b_charge_sm(struct work_struct *smb137b_work)
 
 	dev_dbg(&smb137b_chg->client->dev, "%s\n", __func__);
 
-#if defined(CONFIG_MACH_MSM8X60_EF65L)
+#if 1//defined(CONFIG_MACH_MSM8X60_EF65L)
 	chg_type = atomic_read(&smb_charger_state);
 	
 	if(verified_charger == VERIFY_CURRENT && chg_type == CHG_TYPE_AC) {
@@ -776,9 +777,9 @@ static void smb137b_charge_sm(struct work_struct *smb137b_work)
 		goto out;
 	}
 
-#if 0 // need_to_fix composite_get_udc_state
+#if 1// need_to_fix composite_get_udc_state
 	if(verified_charger == VERIFY_BAD_CHG && chg_type == CHG_TYPE_USB) {
-		if(!composite_get_udc_state()) {
+		if(!android_get_udc_state()) {
 			pr_err("Bad Charger detect!!!\n");
 			verified_charger = VERIFY_CURRENT;
 			smb137b_start_charging(&smb137b_chg->adapter_hw_chg, 4350, BAD_CHG_MAX_CURRENT);
