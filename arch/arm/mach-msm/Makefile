@@ -65,6 +65,8 @@ target += smd_rpc_sym.c
 $(obj)/smd_rpc_sym.c: $(src)/smd_rpc_sym $(src)/mkrpcsym.pl
 	$(call if_changed,mkrpcsym)
 
+CFLAGS_scm.o := $(call as-instr, .arch_extension sec, -DREQUIRES_SEC=1)
+
 obj-$(CONFIG_MSM_SCM) += scm.o scm-boot.o
 obj-$(CONFIG_MSM_SECURE_IO) += scm-io.o
 obj-$(CONFIG_MSM_PIL) += peripheral-loader.o
@@ -121,7 +123,7 @@ endif
 endif
 endif
 endif
-obj-$(CONFIG_MSM_SDIO_TTY) += sdio_tty.o
+obj-$(CONFIG_MSM_SDIO_TTY) += sdio_tty.o sdio_vt.o
 obj-$(CONFIG_MSM_SMD_TTY) += smd_tty.o
 obj-$(CONFIG_MSM_SMD_QMI) += smd_qmi.o
 obj-$(CONFIG_MSM_SMD_PKT) += smd_pkt.o
@@ -401,3 +403,5 @@ endif
 obj-$(CONFIG_PANTECH_RESET_REASON) += sky_sys_reset.o
 obj-$(CONFIG_PANTECH_ERR_CRASH_LOGGING) += pantech_restart.o pantech_apanic.o
 obj-$(CONFIG_PANTECH_DEBUG) += pantech_debug.o
+
+

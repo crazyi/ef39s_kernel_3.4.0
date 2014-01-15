@@ -13,7 +13,7 @@
 # export PATH=$(pwd)/$(your tool chain path)/bin:$PATH
 # export CROSS_COMPILE=$(your compiler prefix)
 export ARCH=arm
-export PATH=~/android/cyanogen/cm10.1/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin:$PATH
+export PATH=~/android/cyanogen/cm10.1/prebuilt/linux-x86/toolchain/arm-eabi-linaro4.7/bin:$PATH
 
 export CROSS_COMPILE=arm-eabi-
 
